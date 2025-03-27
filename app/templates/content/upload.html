@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Files{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Upload Files</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title h4 mb-3">Upload Newsletter or PDF</h2>
+            
+            <form action="{{ url_for('content.upload') }}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="file" class="form-label">Select File to Upload</label>
+                    <input class="form-control" type="file" id="file" name="file" accept=".pdf,.msg,.eml,.txt">
+                    <div class="form-text">Supported file types: PDF (.pdf), Outlook Message (.msg), Email (.eml), Text (.txt)</div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="extract-all" name="extract_all" checked>
+                        <label class="form-check-label" for="extract-all">
+                            Extract all content (including attachments if available)
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Upload & Process</button>
+                <a href="{{ url_for('content.index') }}" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="h5 mb-0">File Requirements</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="h6">PDF Files</h3>
+                    <ul>
+                        <li>Text must be selectable (not scanned images)</li>
+                        <li>Maximum file size: 10MB</li>
+                        <li>Recommended: Documents with clear sections</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">Email Files</h3>
+                    <ul>
+                        <li>Can include attachments (.msg only)</li>
+                        <li>HTML-formatted emails work best</li>
+                        <li>Maximum file size: 15MB (including attachments)</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">Text Files</h3>
+                    <ul>
+                        <li>Plain text files (.txt)</li>
+                        <li>UTF-8 encoding recommended</li>
+                        <li>Maximum file size: 5MB</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

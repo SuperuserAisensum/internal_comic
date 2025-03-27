@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}AiSensum Content Creator{% endblock %}
+
+{% block content %}
+<div class="jumbotron py-5 bg-light rounded">
+    <div class="container">
+        <h1 class="display-4">AiSensum Content Creator</h1>
+        <p class="lead">Automatically generate social media content, comic scripts, and more from your newsletters and PDFs.</p>
+        <hr class="my-4">
+        <p>Choose an option below to get started:</p>
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Content Generator</h5>
+                        <p class="card-text">Generate LinkedIn posts, Instagram captions, and topic ideas from newsletter or PDF content.</p>
+                        <a href="{{ url_for('content.index') }}" class="btn btn-primary">Generate Content</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Comic Generator</h5>
+                        <p class="card-text">Create engaging comic scripts and visual comic panels from your content.</p>
+                        <a href="{{ url_for('comics.index') }}" class="btn btn-success">Create Comics</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h2 class="mb-4">How It Works</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h3 class="h5 card-title">1. Upload Content</h3>
+                    <p class="card-text">Upload your newsletter (.msg, .eml) or PDF files.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h3 class="h5 card-title">2. Configure Settings</h3>
+                    <p class="card-text">Select which types of content you want to generate.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h3 class="h5 card-title">3. Generate & Download</h3>
+                    <p class="card-text">Let AI create your content and download the results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

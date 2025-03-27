@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}Process Content{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Process Content</h1>
+    
+    <div class="alert alert-info">
+        <h4 class="alert-heading">Processing File: {{ filename }}</h4>
+        <p>Your file is being analyzed and processed. Configure the options below to customize your content generation.</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Content Generation Options</h2>
+                </div>
+                <div class="card-body">
+                    <form id="process-form" action="{{ url_for('content.results') }}" method="get">
+                        <input type="hidden" name="filename" value="{{ filename }}">
+                        
+                        <div class="mb-4">
+                            <h3 class="h6">Social Media Content</h3>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="linkedin-toggle" name="generate_linkedin" {% if content_toggles.linkedin %}checked{% endif %}>
+                                <label class="form-check-label" for="linkedin-toggle">
+                                    Generate LinkedIn Posts ({{ content_limits.email_batch.linkedin.total_posts }} posts)
+                                </label>
+                            </div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="instagram-toggle" name="generate_instagram" {% if content_toggles.instagram %}checked{% endif %}>
+                                <label class="form-check-label" for="instagram-toggle">
+                                    Generate Instagram Captions ({{ content_limits.email_batch.instagram.total_posts }} captions)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h3 class="h6">Comic Content</h3>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="comic-scripts-toggle" name="generate_comic_scripts" {% if content_toggles.comic_scripts %}checked{% endif %}>
+                                <label class="form-check-label" for="comic-scripts-toggle">
+                                    Generate Comic Scripts ({{ content_limits.email_batch.comics.total_scripts }} scripts)
+                                </label>
+                            </div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="comic-images-toggle" name="generate_comic_images" {% if content_toggles.comic_images %}checked{% endif %}>
+                                <label class="form-check-label" for="comic-images-toggle">
+                                    Generate Comic Images
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h3 class="h6">Topic Generation</h3>
+                            <div class="mb-3">
+                                <label for="topics-count" class="form-label">Number of topics to generate:</label>
+                                <input type="number" class="form-control" id="topics-count" name="topics_count" value="{{ content_limits.email_batch.topics.max_total }}" min="1" max="10">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="generate-btn">Generate Content</button>
+                        <a href="{{ url_for('content.upload') }}" class="btn btn-outline-secondary">Upload Different File</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Processing Status</h2>
+                </div>
+                <div class="card-body">
+                    <div class="progress mb-3">
+                        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <p id="status-message">Initializing...</p>
+                    
+                    <h3 class="h6 mt-4">Steps:</h3>
+                    <ul class="list-group" id="steps-list">
+                        <li class="list-group-item">File uploaded <span class="badge bg-success float-end">✓</span></li>
+                        <li class="list-group-item">Content extraction <span class="spinner-border spinner-border-sm float-end" role="status"></span></li>
+                        <li class="list-group-item text-muted">Topic analysis</li>
+                        <li class="list-group-item text-muted">Content generation</li>
+                        <li class="list-group-item text-muted">Finalization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Simulated progress update - in a real app, this would be AJAX calls to a backend
+    document.addEventListener('DOMContentLoaded', function() {
+        const progressBar = document.getElementById('progress-bar');
+        const statusMessage = document.getElementById('status-message');
+        const stepsList = document.getElementById('steps-list');
+        const generateBtn = document.getElementById('generate-btn');
+        
+        let progress = 0;
+        const interval = setInterval(function() {
+            progress += 5;
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+            
+            if (progress >= 25) {
+                // Update content extraction step
+                stepsList.children[1].innerHTML = 'Content extraction <span class="badge bg-success float-end">✓</span>';
+                
+                // Start topic analysis
+                if (progress == 25) {
+                    stepsList.children[2].innerHTML = 'Topic analysis <span class="spinner-border spinner-border-sm float-end" role="status"></span>';
+                    stepsList.children[2].classList.remove('text-muted');
+                    statusMessage.textContent = 'Analyzing topics...';
+                }
+            }
+            
+            if (progress >= 50) {
+                // Update topic analysis step
+                stepsList.children[2].innerHTML = 'Topic analysis <span class="badge bg-success float-end">✓</span>';
+                
+                // Start content generation
+                if (progress == 50) {
+                    stepsList.children[3].innerHTML = 'Content generation <span class="spinner-border spinner-border-sm float-end" role="status"></span>';
+                    stepsList.children[3].classList.remove('text-muted');
+                    statusMessage.textContent = 'Generating content...';
+                }
+            }
+            
+            if (progress >= 75) {
+                // Update content generation step
+                stepsList.children[3].innerHTML = 'Content generation <span class="badge bg-success float-end">✓</span>';
+                
+                // Start finalization
+                if (progress == 75) {
+                    stepsList.children[4].innerHTML = 'Finalization <span class="spinner-border spinner-border-sm float-end" role="status"></span>';
+                    stepsList.children[4].classList.remove('text-muted');
+                    statusMessage.textContent = 'Finalizing results...';
+                }
+            }
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                // Update finalization step
+                stepsList.children[4].innerHTML = 'Finalization <span class="badge bg-success float-end">✓</span>';
+                statusMessage.textContent = 'Processing complete!';
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'View Results';
+            }
+        }, 500);
+        
+        // Disable Generate button during "processing"
+        generateBtn.disabled = true;
+        generateBtn.textContent = 'Processing...';
+    });
+</script>
+{% endblock %} 

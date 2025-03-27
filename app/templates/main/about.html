@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}About AiSensum{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h1 class="mb-4">About AiSensum</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title h4">Our Company</h2>
+                <p class="card-text">{{ company_info.description }}</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title h4">Our Brand Voice</h2>
+                <p class="card-text">{{ company_info.brand_voice }}</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title h4">Our Tone</h2>
+                <p class="card-text">{{ company_info.tone }}</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title h4">Our Target Audience</h2>
+                <p class="card-text">{{ company_info.target_audience }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title h4">Our Content Goals</h2>
+                <ul class="list-group list-group-flush">
+                    {% for goal in company_info.content_goals %}
+                        <li class="list-group-item">{{ goal }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

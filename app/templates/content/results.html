@@ -1,0 +1,424 @@
+{% extends 'base.html' %}
+
+{% block title %}Generated Content{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Generated Content</h1>
+    
+    <div class="alert alert-success mb-4">
+        <h4 class="alert-heading">Content Generation Complete!</h4>
+        <p>Your content has been successfully generated. You can view and download the results below.</p>
+    </div>
+    
+    {% if results.linkedin_posts %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="h5 mb-0">LinkedIn Posts</h2>
+            <button class="btn btn-sm btn-outline-primary" onclick="downloadAllLinkedIn()">Download All</button>
+        </div>
+        <div class="card-body">
+            {% for post in results.linkedin_posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h3 class="h6" contenteditable="false" id="linkedin-title-{{ loop.index }}">{{ post.title }}</h3>
+                    <p contenteditable="false" id="linkedin-content-{{ loop.index }}">{{ post.content }}</p>
+                    <div class="hashtags-container" id="linkedin-hashtags-{{ loop.index }}">
+                        {% for hashtag in post.hashtags %}
+                        <span class="badge bg-secondary me-1">{{ hashtag }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyLinkedInPost({{ loop.index }})">Copy</button>
+                        <button class="btn btn-sm btn-outline-secondary edit-btn" onclick="toggleEdit('linkedin', {{ loop.index }})">Edit</button>
+                        <button class="btn btn-sm btn-outline-primary save-btn d-none" onclick="saveEdit('linkedin', {{ loop.index }})">Save</button>
+                        <button class="btn btn-sm btn-outline-secondary cancel-btn d-none" onclick="cancelEdit('linkedin', {{ loop.index }})">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if results.instagram_posts %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="h5 mb-0">Instagram Captions</h2>
+            <button class="btn btn-sm btn-outline-primary" onclick="downloadAllInstagram()">Download All</button>
+        </div>
+        <div class="card-body">
+            {% for post in results.instagram_posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p contenteditable="false" id="instagram-caption-{{ loop.index }}">{{ post.caption }}</p>
+                    <div class="mt-2">
+                        <p class="text-muted"><small>Image suggestion: <span contenteditable="false" id="instagram-suggestion-{{ loop.index }}">{{ post.image_suggestion }}</span></small></p>
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyInstagramPost({{ loop.index }})">Copy</button>
+                        <button class="btn btn-sm btn-outline-secondary edit-btn" onclick="toggleEdit('instagram', {{ loop.index }})">Edit</button>
+                        <button class="btn btn-sm btn-outline-primary save-btn d-none" onclick="saveEdit('instagram', {{ loop.index }})">Save</button>
+                        <button class="btn btn-sm btn-outline-secondary cancel-btn d-none" onclick="cancelEdit('instagram', {{ loop.index }})">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if results.topics %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="h5 mb-0">Content Topics</h2>
+            <button class="btn btn-sm btn-outline-primary" onclick="downloadAllTopics()">Download All</button>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for topic in results.topics %}
+                <li class="list-group-item d-flex justify-content-between align-items-center" id="topic-item-{{ loop.index }}">
+                    <span id="topic-text-{{ loop.index }}">{{ topic }}</span>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyTopic({{ loop.index }})">Copy</button>
+                        <button class="btn btn-sm btn-outline-success" onclick="generateArticle({{ loop.index }})" id="generate-btn-{{ loop.index }}">Generate Article</button>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="d-flex justify-content-between">
+        <a href="{{ url_for('content.index') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+        <a href="{{ url_for('content.upload') }}" class="btn btn-primary">Process Another File</a>
+    </div>
+</div>
+
+<!-- Toast untuk notifikasi -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Content copied to clipboard!
+        </div>
+    </div>
+</div>
+
+<!-- Modal untuk artikel yang digenerate -->
+<div class="modal fade" id="articleModal" tabindex="-1" aria-labelledby="articleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="articleModalLabel">Generated Article</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="article-content">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Generating article and comic...</p>
+                    </div>
+                </div>
+                <div id="comic-preview" class="mt-4 d-none">
+                    <h6>Generated Comic Preview</h6>
+                    <div class="comic-panels"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="downloadArticle()">Download Article</button>
+                <button type="button" class="btn btn-success" onclick="downloadComic()">Download Comic</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Simpan konten asli untuk fitur edit
+let originalContent = {};
+
+// Fungsi untuk copy ke clipboard
+async function copyToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        const toast = new bootstrap.Toast(document.getElementById('copyToast'));
+        toast.show();
+    } catch (err) {
+        console.error('Failed to copy text: ', err);
+    }
+}
+
+// Fungsi untuk copy LinkedIn post
+function copyLinkedInPost(index) {
+    const title = document.getElementById(`linkedin-title-${index}`).innerText;
+    const content = document.getElementById(`linkedin-content-${index}`).innerText;
+    const hashtags = Array.from(document.getElementById(`linkedin-hashtags-${index}`).getElementsByTagName('span'))
+        .map(span => span.innerText)
+        .join(' ');
+    const fullText = `${title}\n\n${content}\n\n${hashtags}`;
+    copyToClipboard(fullText);
+}
+
+// Fungsi untuk copy Instagram post
+function copyInstagramPost(index) {
+    const caption = document.getElementById(`instagram-caption-${index}`).innerText;
+    copyToClipboard(caption);
+}
+
+// Fungsi untuk toggle mode edit
+function toggleEdit(type, index) {
+    const elements = getEditableElements(type, index);
+    
+    // Simpan konten asli
+    originalContent = {
+        type: type,
+        index: index,
+        content: {}
+    };
+    
+    elements.forEach(el => {
+        el.contentEditable = "true";
+        el.classList.add('border', 'border-primary', 'p-2', 'rounded');
+        originalContent.content[el.id] = el.innerText;
+    });
+    
+    // Toggle tombol
+    const container = document.getElementById(`${type}-${type === 'linkedin' ? 'title' : 'caption'}-${index}`).closest('.card-body');
+    container.querySelector('.edit-btn').classList.add('d-none');
+    container.querySelector('.copy-btn').classList.add('d-none');
+    container.querySelector('.save-btn').classList.remove('d-none');
+    container.querySelector('.cancel-btn').classList.remove('d-none');
+}
+
+// Fungsi untuk simpan hasil edit
+function saveEdit(type, index) {
+    const elements = getEditableElements(type, index);
+    elements.forEach(el => {
+        el.contentEditable = "false";
+        el.classList.remove('border', 'border-primary', 'p-2', 'rounded');
+    });
+    
+    // Toggle tombol
+    const container = document.getElementById(`${type}-${type === 'linkedin' ? 'title' : 'caption'}-${index}`).closest('.card-body');
+    container.querySelector('.edit-btn').classList.remove('d-none');
+    container.querySelector('.copy-btn').classList.remove('d-none');
+    container.querySelector('.save-btn').classList.add('d-none');
+    container.querySelector('.cancel-btn').classList.add('d-none');
+    
+    // TODO: Implement AJAX call to save changes to server
+}
+
+// Fungsi untuk batalkan edit
+function cancelEdit(type, index) {
+    if (originalContent.type === type && originalContent.index === index) {
+        const elements = getEditableElements(type, index);
+        elements.forEach(el => {
+            el.innerText = originalContent.content[el.id];
+            el.contentEditable = "false";
+            el.classList.remove('border', 'border-primary', 'p-2', 'rounded');
+        });
+    }
+    
+    // Toggle tombol
+    const container = document.getElementById(`${type}-${type === 'linkedin' ? 'title' : 'caption'}-${index}`).closest('.card-body');
+    container.querySelector('.edit-btn').classList.remove('d-none');
+    container.querySelector('.copy-btn').classList.remove('d-none');
+    container.querySelector('.save-btn').classList.add('d-none');
+    container.querySelector('.cancel-btn').classList.add('d-none');
+}
+
+// Helper function untuk mendapatkan elemen yang bisa diedit
+function getEditableElements(type, index) {
+    if (type === 'linkedin') {
+        return [
+            document.getElementById(`linkedin-title-${index}`),
+            document.getElementById(`linkedin-content-${index}`)
+        ];
+    } else {
+        return [
+            document.getElementById(`instagram-caption-${index}`),
+            document.getElementById(`instagram-suggestion-${index}`)
+        ];
+    }
+}
+
+// Fungsi untuk download semua LinkedIn posts
+function downloadAllLinkedIn() {
+    let content = '';
+    const posts = document.querySelectorAll('[id^="linkedin-title-"]');
+    posts.forEach((post, i) => {
+        const index = i + 1;
+        const title = document.getElementById(`linkedin-title-${index}`).innerText;
+        const content_text = document.getElementById(`linkedin-content-${index}`).innerText;
+        const hashtags = Array.from(document.getElementById(`linkedin-hashtags-${index}`).getElementsByTagName('span'))
+            .map(span => span.innerText)
+            .join(' ');
+        content += `${title}\n\n${content_text}\n\n${hashtags}\n\n---\n\n`;
+    });
+    downloadText('linkedin_posts.txt', content);
+}
+
+// Fungsi untuk download semua Instagram captions
+function downloadAllInstagram() {
+    let content = '';
+    const posts = document.querySelectorAll('[id^="instagram-caption-"]');
+    posts.forEach((post, i) => {
+        const index = i + 1;
+        const caption = document.getElementById(`instagram-caption-${index}`).innerText;
+        const suggestion = document.getElementById(`instagram-suggestion-${index}`).innerText;
+        content += `Caption:\n${caption}\n\nImage Suggestion:\n${suggestion}\n\n---\n\n`;
+    });
+    downloadText('instagram_captions.txt', content);
+}
+
+// Fungsi untuk copy topic
+function copyTopic(index) {
+    const topic = document.getElementById(`topic-text-${index}`).innerText;
+    copyToClipboard(topic);
+}
+
+// Fungsi untuk download semua topics
+function downloadAllTopics() {
+    let content = '';
+    const topics = document.querySelectorAll('[id^="topic-text-"]');
+    topics.forEach((topic, i) => {
+        content += `${i + 1}. ${topic.innerText}\n`;
+    });
+    downloadText('content_topics.txt', content);
+}
+
+// Fungsi untuk generate article dan comic
+async function generateArticle(index) {
+    const topic = document.getElementById(`topic-text-${index}`).innerText;
+    const generateBtn = document.getElementById(`generate-btn-${index}`);
+    const articleModal = new bootstrap.Modal(document.getElementById('articleModal'));
+    
+    // Reset modal content
+    document.getElementById('article-content').innerHTML = `
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Generating article and comic...</p>
+        </div>
+    `;
+    document.getElementById('comic-preview').classList.add('d-none');
+    document.querySelector('.comic-panels').innerHTML = '';
+    
+    // Show modal
+    articleModal.show();
+    
+    // Disable generate button
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+    
+    try {
+        // Call API to generate article
+        const response = await fetch('/content/generate-article', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ topic: topic })
+        });
+        
+        if (!response.ok) throw new Error('Failed to generate article');
+        
+        const data = await response.json();
+        
+        // Update modal with generated content
+        document.getElementById('article-content').innerHTML = `
+            <h4>${data.title}</h4>
+            <div class="article-text">${data.content}</div>
+        `;
+        
+        // Show comic preview if available
+        if (data.comic_panels && data.comic_panels.length > 0) {
+            const comicPreview = document.getElementById('comic-preview');
+            const panelsContainer = comicPreview.querySelector('.comic-panels');
+            
+            data.comic_panels.forEach((panel, i) => {
+                const panelElement = document.createElement('div');
+                panelElement.className = 'comic-panel mb-3';
+                panelElement.innerHTML = `
+                    <img src="${panel.image_url}" alt="Comic panel ${i + 1}" class="img-fluid rounded">
+                    <p class="mt-2 small text-muted">Panel ${i + 1}: ${panel.description}</p>
+                `;
+                panelsContainer.appendChild(panelElement);
+            });
+            
+            comicPreview.classList.remove('d-none');
+        }
+        
+        // Store generated content for download
+        window.generatedContent = data;
+        
+    } catch (error) {
+        console.error('Error generating article:', error);
+        document.getElementById('article-content').innerHTML = `
+            <div class="alert alert-danger">
+                Failed to generate article. Please try again later.
+            </div>
+        `;
+    } finally {
+        // Re-enable generate button
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate Article';
+    }
+}
+
+// Fungsi untuk download article
+function downloadArticle() {
+    if (!window.generatedContent) return;
+    
+    const content = `${window.generatedContent.title}\n\n${window.generatedContent.content}`;
+    downloadText('generated_article.txt', content);
+}
+
+// Fungsi untuk download comic
+function downloadComic() {
+    if (!window.generatedContent || !window.generatedContent.comic_panels) return;
+    
+    let content = 'Generated Comic Script\n\n';
+    window.generatedContent.comic_panels.forEach((panel, i) => {
+        content += `Panel ${i + 1}:\n`;
+        content += `Description: ${panel.description}\n`;
+        content += `Dialogue: ${panel.dialogue || 'None'}\n\n`;
+    });
+    
+    downloadText('comic_script.txt', content);
+}
+
+// Helper function untuk download text file
+function downloadText(filename, text) {
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+</script>
+
+<style>
+.comic-panel img {
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.article-text {
+    white-space: pre-wrap;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+</style>
+{% endblock %} 

@@ -1,0 +1,7 @@
+Flask==3.0.0
+Flask-Bootstrap==3.3.7.1
+Pillow==10.2.0
+requests==2.31.0
+reportlab==4.0.9
+python-dotenv==1.0.1
+Werkzeug==3.0.1

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Comic Generator{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>AI Comic Generator</h1>
+            <p class="lead">Create professional comics with AI-powered image generation</p>
+            
+            <div class="d-grid gap-2 d-md-flex mt-4">
+                <a href="{{ url_for('comics.create') }}" class="btn btn-primary btn-lg">Create New Comic</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='images/comic_example.png') }}" alt="Comic Example" class="img-fluid rounded shadow" onerror="this.style.display='none'">
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📝 Easy Script Format</h5>
+                    <p class="card-text">Write your comic using a simple format: describe each panel and add character dialogue. The AI does the rest!</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🎨 Consistent Characters</h5>
+                    <p class="card-text">Our AI maintains visual consistency across panels, ensuring your characters look the same throughout your comic.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">💾 Multiple Export Options</h5>
+                    <p class="card-text">Download your finished comic as a PDF, a single image with all panels, or just the script for later use.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">How It Works</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-3 text-center">
+                            <div class="h1 text-primary mb-3">1</div>
+                            <h5>Write Your Script</h5>
+                            <p>Create your comic script using panels and dialogue</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="h1 text-primary mb-3">2</div>
+                            <h5>AI Generates Images</h5>
+                            <p>Our AI creates consistent, high-quality panel images</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="h1 text-primary mb-3">3</div>
+                            <h5>Preview & Regenerate</h5>
+                            <p>Don't like a panel? Regenerate until it's perfect</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="h1 text-primary mb-3">4</div>
+                            <h5>Download & Share</h5>
+                            <p>Get your comic in multiple formats</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

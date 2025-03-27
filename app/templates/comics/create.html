@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Comic{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Create New Comic</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">Comic Script</div>
+                <div class="card-body">
+                    <form action="{{ url_for('comics.create') }}" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Comic Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter comic title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="script" class="form-label">Comic Script</label>
+                            <textarea class="form-control" id="script" name="script" rows="15" placeholder="Enter your comic script here..." required></textarea>
+                            <div class="form-text">
+                                Use the format: "Panel 1: [panel description]" followed by character dialogue like "Character: Dialogue text"
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Generate Comic</button>
+                            <a href="{{ url_for('comics.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">Script Format Guidelines</div>
+                <div class="card-body">
+                    <h5>Script Format</h5>
+                    <p>Start each panel with <code>Panel [number]: [description]</code></p>
+                    <p>Add dialogue as <code>[Character]: [Dialogue text]</code></p>
+                    
+                    <h5>Example:</h5>
+                    <pre class="bg-light p-3 rounded"><code>Panel 1: A scientist in a lab coat stands in front of a futuristic AI display.
+
+Dr. Smith: Today we're unveiling our latest AI model!
+
+Panel 2: Close-up of the AI interface showing colorful neural networks.
+
+AI: Hello, I'm ready to assist you.
+
+Panel 3: The audience looks amazed, with a woman in the front raising her hand.
+
+Woman: Can it really understand emotions?
+
+Dr. Smith: Absolutely! Let me demonstrate...</code></pre>
+                    
+                    <div class="d-grid">
+                        <button id="use-template" class="btn btn-outline-primary mb-3">Use this template</button>
+                    </div>
+                    
+                    <h5>Advanced Example:</h5>
+                    <div class="alert alert-info mb-2">
+                        <small>This longer template shows a complete story with more detailed descriptions and character development.</small>
+                    </div>
+                    <pre class="bg-light p-3 rounded" id="advanced-template"><code>Panel 1: Wide shot of an alien landscape, vibrant with unusual plant life and strange rock formations. Terraforming technology towers in the background. The sun sets with colors of orange and purple.                   
+Caption: On the alien planet of Glorath, beauty flourishes…                       
+
+Panel 2: Close-up of Tessa, a determined-looking terraformer with a headset and a rugged jumpsuit, pointing excitedly at the glowing flora through a holographic display.
+Tessa: Look at these rare blooms! Their bioluminescence could hold the key to sustainable energy!
+
+Panel 3: Switch to a sleek office with a view of the alien landscape. Nexus, a sharp-suited, slick corporate magnate with a smug grin, speaks into a communicator.
+Nexus: Tessa's wasting her time. Once we terraform this planet, we can sell it off in parcels!
+
+Panel 4: Back to Tessa, surrounded by her small team of enthusiastic scientists, each studying holograms of the landscape.
+Tessa: We have to show them that preserving this world is more valuable than destroying it!
+
+Panel 5: Cut to Nexus in a high-tech command center, surrounded by elaborate maps and models, a giant "Terraforming for Profit!" banner behind him.
+Nexus: They won't stop progress. Money speaks louder than ideals!</code></pre>
+                    
+                    <div class="d-grid">
+                        <button id="use-advanced-template" class="btn btn-outline-secondary mb-3">Use advanced template</button>
+                    </div>
+                    
+                    <h5>Tips for Better Comics:</h5>
+                    <ul>
+                        <li>Use 3-5 panels for a complete story</li>
+                        <li>Be descriptive about character appearances</li>
+                        <li>Maintain consistent character names</li>
+                        <li>Include setting details in each panel</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Simple template button
+        const useTemplateBtn = document.getElementById('use-template');
+        if (useTemplateBtn) {
+            useTemplateBtn.addEventListener('click', function() {
+                // Get the template content from the first example
+                const templateContent = document.querySelector('pre:not(#advanced-template) code').textContent.trim();
+                
+                // Set it to the script textarea
+                document.getElementById('script').value = templateContent;
+                
+                // Set a default title
+                if (!document.getElementById('title').value) {
+                    document.getElementById('title').value = "AI Demo Comic";
+                }
+                
+                // Scroll and focus
+                scrollToForm();
+            });
+        }
+        
+        // Advanced template button
+        const useAdvancedTemplateBtn = document.getElementById('use-advanced-template');
+        if (useAdvancedTemplateBtn) {
+            useAdvancedTemplateBtn.addEventListener('click', function() {
+                // Get the content from the advanced template
+                const advancedContent = document.querySelector('#advanced-template code').textContent.trim();
+                
+                // Set it to the script textarea
+                document.getElementById('script').value = advancedContent;
+                
+                // Set a default title
+                if (!document.getElementById('title').value) {
+                    document.getElementById('title').value = "Green vs. Greed";
+                }
+                
+                // Scroll and focus
+                scrollToForm();
+            });
+        }
+        
+        // Helper function to scroll to form
+        function scrollToForm() {
+            document.getElementById('title').scrollIntoView({ behavior: 'smooth' });
+            // Focus on the title field
+            setTimeout(() => {
+                document.getElementById('title').focus();
+            }, 500);
+        }
+    });
+</script>
+{% endblock %} 

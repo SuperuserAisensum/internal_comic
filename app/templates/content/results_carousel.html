@@ -1,0 +1,439 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Generated Carousel Content</h1>
+
+    {# Check if results exist, panels exist, and it's not an error message #}
+    {% if results and results.carousel_panels and results.carousel_panels[0].title != 'Error' %}
+        <h2 class="h4 mb-3">Carousel Panels ({{ results.carousel_panels|length }} panels generated)</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="carousel-panels-container">
+            {% for panel in results.carousel_panels %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm panel-card" id="panel-card-{{ loop.index }}" data-panel-index="{{ loop.index }}">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <span>Panel {{ loop.index }}</span>
+                            <div class="panel-actions">
+                                <button class="btn btn-sm btn-light action-btn copy-btn" title="Copy Text" onclick="copyPanel({{ loop.index }})"><i class="fas fa-copy"></i></button>
+                                <button class="btn btn-sm btn-light action-btn edit-btn" title="Edit Text" onclick="toggleEdit({{ loop.index }}, true)"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-success action-btn save-btn d-none" title="Save Text" onclick="toggleEdit({{ loop.index }}, false, true)"><i class="fas fa-save"></i></button>
+                                <button class="btn btn-sm btn-danger action-btn cancel-btn d-none" title="Cancel Edit" onclick="toggleEdit({{ loop.index }}, false, false)"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                         {# Image Preview Area #}
+                        <div class="panel-image-preview ratio ratio-1x1" style="background-color: #e9ecef;">
+                             <img src="" alt="Image Preview Panel {{ loop.index }}" class="img-fluid panel-image d-none" style="object-fit: cover;">
+                             <div class="no-image-placeholder d-flex align-items-center justify-content-center text-muted small">
+                                 No Image Uploaded
+                             </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title editable editable-title" contenteditable="false" data-original-content="{{ panel.title }}">{{ panel.title }}</h5>
+                            <p class="card-text editable editable-text" contenteditable="false" data-original-content="{{ panel.text }}">{{ panel.text }}</p>
+                        </div>
+                        <div class="card-footer bg-light border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="text-muted fst-italic text-truncate" title="{{ panel.image_suggestion or 'N/A' }}">
+                                    <i class="fas fa-lightbulb me-1"></i> {{ panel.image_suggestion or 'N/A' }}
+                                </small>
+                                <input type="file" class="d-none panel-image-input" accept="image/*" onchange="handleImageUpload(event, {{ loop.index }})">
+                                <button class="btn btn-sm btn-outline-secondary add-image-btn" title="Add/Change Image" onclick="triggerImageUpload({{ loop.index }})"><i class="fas fa-image"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {# Check if results exist, panels exist, and it IS an error message #}
+    {% elif results and results.carousel_panels and results.carousel_panels[0].title == 'Error' %}
+         <div class="alert alert-danger">
+            <h4>Error Generating Carousel</h4>
+            <p>Could not generate carousel content. Details:</p>
+            {# Display error text, check if image_suggestion exists for safety #}
+            <pre>{{ results.carousel_panels[0].text }}</pre>
+            {% if results.carousel_panels[0].image_suggestion %}
+                <pre>Suggestion: {{ results.carousel_panels[0].image_suggestion }}</pre>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            No carousel panels were generated or the format is unexpected.
+        </div>
+    {% endif %}
+
+    <div class="mt-4 d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{{ url_for('content.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> Back to Dashboard</a>
+            <a href="{{ url_for('content.history') }}" class="btn btn-info"><i class="fas fa-history me-1"></i> View History</a>
+        </div>
+         {% if results and results.carousel_panels and results.carousel_panels[0].title != 'Error' %}
+         <div>
+            <button class="btn btn-success" id="download-images-btn" onclick="generateAndDownloadPanels()"><i class="fas fa-images me-1"></i> Download Panels as Images</button>
+            <button class="btn btn-primary ms-2" onclick="downloadCarouselText()"><i class="fas fa-download me-1"></i> Download Text Only</button>
+         </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- Toast for copy notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="copyToastCarousel" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Panel content copied to clipboard!
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include JSZip library from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+    // Store image data URLs for each panel
+    const panelImageData = {}; 
+
+    // --- Clipboard Functionality ---
+    async function copyToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            showToast('copyToastCarousel');
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy text.');
+        }
+    }
+
+    function showToast(toastId) {
+        const toastEl = document.getElementById(toastId);
+        if (toastEl) {
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    }
+
+    function copyPanel(index) {
+        const card = document.getElementById(`panel-card-${index}`);
+        const title = card.querySelector('.editable-title').textContent.trim();
+        const text = card.querySelector('.editable-text').textContent.trim();
+        const fullText = `Panel ${index}: ${title}\n\n${text}`;
+        copyToClipboard(fullText);
+    }
+
+    // --- Edit Functionality ---
+    function toggleEdit(index, isEditing, shouldSave = false) {
+        const card = document.getElementById(`panel-card-${index}`);
+        const titleElement = card.querySelector('.editable-title');
+        const textElement = card.querySelector('.editable-text');
+        const copyBtn = card.querySelector('.copy-btn');
+        const editBtn = card.querySelector('.edit-btn');
+        const saveBtn = card.querySelector('.save-btn');
+        const cancelBtn = card.querySelector('.cancel-btn');
+
+        if (isEditing) {
+            // Enable editing
+            titleElement.contentEditable = 'true';
+            textElement.contentEditable = 'true';
+            titleElement.classList.add('border', 'border-primary', 'p-1');
+            textElement.classList.add('border', 'border-primary', 'p-1');
+
+            // Toggle button visibility
+            copyBtn.classList.add('d-none');
+            editBtn.classList.add('d-none');
+            saveBtn.classList.remove('d-none');
+            cancelBtn.classList.remove('d-none');
+
+            titleElement.focus(); // Focus on title first
+        } else {
+            // Exiting edit mode
+            if (!shouldSave) {
+                // Cancelled: Restore original content from data attribute
+                titleElement.textContent = titleElement.dataset.originalContent;
+                textElement.textContent = textElement.dataset.originalContent;
+            } else {
+                 // Saved: Update the original content data attribute to the new value
+                 titleElement.dataset.originalContent = titleElement.textContent;
+                 textElement.dataset.originalContent = textElement.textContent;
+            }
+            
+            // Disable editing
+            titleElement.contentEditable = 'false';
+            textElement.contentEditable = 'false';
+            titleElement.classList.remove('border', 'border-primary', 'p-1');
+            textElement.classList.remove('border', 'border-primary', 'p-1');
+
+            // Toggle button visibility
+            copyBtn.classList.remove('d-none');
+            editBtn.classList.remove('d-none');
+            saveBtn.classList.add('d-none');
+            cancelBtn.classList.add('d-none');
+        }
+    }
+    
+    // --- Image Upload Functionality ---
+    function triggerImageUpload(index) {
+        // Find the hidden input associated with this panel and click it
+        const card = document.getElementById(`panel-card-${index}`);
+        const input = card.querySelector('.panel-image-input');
+        input.click();
+    }
+
+    function handleImageUpload(event, index) {
+        const file = event.target.files[0];
+        if (!file || !file.type.startsWith('image/')) {
+            console.warn('No image file selected or file is not an image.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imageDataUrl = e.target.result;
+            panelImageData[index] = imageDataUrl; // Store the data URL
+
+            // Update the preview image
+            const card = document.getElementById(`panel-card-${index}`);
+            const imgPreview = card.querySelector('.panel-image');
+            const placeholder = card.querySelector('.no-image-placeholder');
+            imgPreview.src = imageDataUrl;
+            imgPreview.classList.remove('d-none');
+            placeholder.classList.add('d-none');
+        }
+        reader.onerror = function(e) {
+             console.error("Error reading image file:", e);
+             alert("Error loading image preview.");
+        }
+        reader.readAsDataURL(file);
+    }
+
+    // --- Canvas Image Generation and Zipping/Download ---
+    async function generateAndDownloadPanels() {
+        const downloadButton = document.getElementById('download-images-btn');
+        const originalButtonText = downloadButton.innerHTML;
+        downloadButton.disabled = true;
+        downloadButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+        
+        const zip = new JSZip();
+        const panelCards = document.querySelectorAll('.panel-card');
+        const promises = [];
+
+        panelCards.forEach((card) => {
+            const index = card.dataset.panelIndex;
+            const title = card.querySelector('.editable-title').textContent.trim();
+            const text = card.querySelector('.editable-text').textContent.trim();
+            const imageDataUrl = panelImageData[index]; // Get stored image data URL
+
+            // Create image promise for each panel
+            const promise = createPanelImage(imageDataUrl, title, text)
+                .then(panelImageDataUrl => {
+                    if (panelImageDataUrl) {
+                         // Add image data to zip (remove data:image/png;base64, prefix)
+                         const base64Data = panelImageDataUrl.split(',')[1];
+                         zip.file(`panel_${index}.png`, base64Data, { base64: true });
+                         console.log(`Panel ${index} added to zip.`);
+                    } else {
+                         console.warn(`Skipping panel ${index} due to image generation error.`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error generating image for panel ${index}:`, error);
+                    alert(`Error generating image for panel ${index}. Check console for details.`);
+                });
+            promises.push(promise);
+        });
+
+        try {
+             await Promise.all(promises); // Wait for all images to be generated and added
+             
+             if (Object.keys(zip.files).length === 0) {
+                 alert("No images were generated. Did you upload background images?");
+                 throw new Error("No files added to zip");
+             }
+
+             console.log("Generating ZIP file...");
+             const zipBlob = await zip.generateAsync({ type: "blob" });
+             
+             // Trigger download
+             const link = document.createElement('a');
+             link.href = URL.createObjectURL(zipBlob);
+             link.download = 'carousel_panels.zip';
+             document.body.appendChild(link);
+             link.click();
+             document.body.removeChild(link);
+             URL.revokeObjectURL(link.href); // Clean up
+             console.log("ZIP file download triggered.");
+
+        } catch (error) {
+             console.error("Error generating or downloading ZIP file:", error);
+             if (error.message !== "No files added to zip") {
+                 alert("An error occurred while generating the downloadable ZIP file.");
+             }
+        } finally {
+             // Restore button state
+             downloadButton.disabled = false;
+             downloadButton.innerHTML = originalButtonText;
+        }
+    }
+
+    async function createPanelImage(backgroundImageDataUrl, title, text) {
+        return new Promise((resolve, reject) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const canvasSize = 1080; // Standard square size
+            canvas.width = canvasSize;
+            canvas.height = canvasSize;
+
+            const img = new Image();
+            img.onload = () => {
+                // Draw background image (cover the canvas)
+                ctx.drawImage(img, 0, 0, canvasSize, canvasSize);
+
+                // --- Text Styling --- 
+                // Add a semi-transparent overlay for better text readability? (optional)
+                // ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; 
+                // ctx.fillRect(0, canvasSize * 0.6, canvasSize, canvasSize * 0.4); // Example: bottom 40%
+
+                ctx.fillStyle = 'white'; // Text color
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // --- Title Text --- 
+                let titleFontSize = 80;
+                ctx.font = `bold ${titleFontSize}px Arial`;
+                // Basic check to reduce font size if title is too wide
+                while (ctx.measureText(title).width > canvasSize * 0.9 && titleFontSize > 30) {
+                    titleFontSize -= 5;
+                    ctx.font = `bold ${titleFontSize}px Arial`;
+                }
+                 // Position title (e.g., slightly above center)
+                const titleY = canvasSize * 0.7;
+                ctx.fillText(title, canvasSize / 2, titleY);
+
+                // --- Body Text --- 
+                let textFontSize = 45;
+                ctx.font = `${textFontSize}px Arial`;
+                const textY = titleY + titleFontSize * 0.8; // Position below title
+                const maxWidth = canvasSize * 0.85; // Max width for text wrapping
+                const lineHeight = textFontSize * 1.2;
+                
+                wrapText(ctx, text, canvasSize / 2, textY, maxWidth, lineHeight);
+
+                resolve(canvas.toDataURL('image/png')); // Return canvas as PNG data URL
+            };
+            img.onerror = (error) => {
+                 console.error("Error loading background image:", error);
+                 // Optionally: resolve with a default image or null
+                 // For now, reject to indicate failure
+                 reject(new Error("Failed to load background image")); 
+            };
+
+            // Set src AFTER onload/onerror are defined
+            if (backgroundImageDataUrl) {
+                 img.src = backgroundImageDataUrl;
+            } else {
+                // If no image uploaded, draw a default background and then text
+                ctx.fillStyle = '#6c757d'; // Default gray background
+                ctx.fillRect(0, 0, canvasSize, canvasSize);
+                
+                // --- Title Text (on default bg) --- 
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                let titleFontSize = 80;
+                ctx.font = `bold ${titleFontSize}px Arial`;
+                while (ctx.measureText(title).width > canvasSize * 0.9 && titleFontSize > 30) { titleFontSize -= 5; ctx.font = `bold ${titleFontSize}px Arial`; }
+                const titleY = canvasSize * 0.4;
+                ctx.fillText(title, canvasSize / 2, titleY);
+                
+                // --- Body Text (on default bg) ---
+                let textFontSize = 45;
+                ctx.font = `${textFontSize}px Arial`;
+                const textY = titleY + titleFontSize;
+                const maxWidth = canvasSize * 0.85;
+                const lineHeight = textFontSize * 1.2;
+                wrapText(ctx, text, canvasSize / 2, textY, maxWidth, lineHeight);
+                
+                resolve(canvas.toDataURL('image/png')); 
+            }
+        });
+    }
+
+    // Helper function for text wrapping on canvas
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ');
+        let line = '';
+        let currentY = y;
+
+        for(let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = context.measureText(testLine);
+            const testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                context.fillText(line, x, currentY);
+                line = words[n] + ' ';
+                currentY += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        context.fillText(line, x, currentY);
+    }
+
+    // --- Download Text Only Functionality ---
+    function downloadCarouselText() {
+        let content = 'Generated Carousel Ad Text\n\n';
+        const panelCards = document.querySelectorAll('.panel-card');
+        panelCards.forEach((card, i) => {
+            const title = card.querySelector('.editable-title').textContent.trim();
+            const text = card.querySelector('.editable-text').textContent.trim();
+            const suggestionElement = card.querySelector('.card-footer small');
+            const suggestion = suggestionElement ? suggestionElement.textContent.replace('Image Suggestion:','').trim() : 'N/A';
+            
+            content += `--- Panel ${i + 1} ---\n`;
+            content += `Title: ${title}\n`;
+            content += `Text: ${text}\n`;
+            content += `Image Suggestion: ${suggestion}\n\n`;
+        });
+        downloadTextFile('carousel_content.txt', content);
+    }
+
+    // Helper to download text file
+    function downloadTextFile(filename, text) {
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Add Font Awesome for icons if not already in base -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .editable {
+        min-height: 1.5em; /* Ensure elements are clickable even if empty */
+    }
+    .panel-actions .btn {
+         margin-left: 2px; /* Spacing between buttons */
+         padding: 0.2rem 0.4rem; /* Smaller buttons */
+         font-size: 0.8rem;
+    }
+    .card-header span {
+        font-weight: bold;
+    }
+    .panel-image-preview { width: 100%; }
+    .add-image-btn { line-height: 1; }
+    .text-truncate { max-width: 150px; display: inline-block; vertical-align: middle; }
+</style>
+{% endblock %} 

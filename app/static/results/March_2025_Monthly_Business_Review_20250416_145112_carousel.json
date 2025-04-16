@@ -1,0 +1,39 @@
+{
+    "carousel_panels": [
+        {
+            "title": "Welcome to March 2025",
+            "text": "Dive into our latest business review with the Ai Science Team."
+        },
+        {
+            "title": "Project Overview",
+            "text": "338 tasks completed. Ads, ad-hoc, development, and paid projects."
+        },
+        {
+            "title": "Team Performance",
+            "text": "Aini's tasks up by 231%, while Kevin's decreased by 19%."
+        },
+        {
+            "title": "Client Focus",
+            "text": "Nestle, Bank Mega, and more - see our client-centric tasks."
+        },
+        {
+            "title": "What We've Done",
+            "text": "New features for Bank Mega, Nestle. Mobile & web camera apps deployed."
+        },
+        {
+            "title": "Creative Solutions",
+            "text": "Prochiz recipes, Primer image edits, AI-Q chatbot in action!"
+        },
+        {
+            "title": "Innovative Prototypes",
+            "text": "From AI videos to voice assistants, we're pushing boundaries."
+        },
+        {
+            "title": "Future Plans",
+            "text": "Imagine the Impossible. Create the Inconceivable. Visit aisensum.com."
+        }
+    ],
+    "result_type": "carousel",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "timestamp": "2025-04-16T07:51:12.908587"
+}

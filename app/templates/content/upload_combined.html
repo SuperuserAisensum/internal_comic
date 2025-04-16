@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate Content + Comic{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Generate Carousel Content and Comic Strip</h1>
+    <p class="lead mb-4">Upload a plain text file (.txt) or a PDF document (.pdf). The system will generate both 8-panel carousel content and a comic strip based on the document.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="file" class="form-label">Select .txt or .pdf File:</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".txt,.pdf" required>
+        </div>
+        {# Removed num_panels input #}
+        <button type="submit" class="btn btn-warning">Upload and Generate Both</button>
+    </form>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    File Requirements
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>File Types:</strong> Plain Text (.txt), PDF (.pdf)</li>
+                        <li><strong>Encoding (TXT):</strong> UTF-8 recommended</li>
+                        <li><strong>Max Size:</strong> 5MB for .txt, 10MB for .pdf</li>
+                        <li><strong>Output:</strong> 8 Carousel Panels + Comic Strip Images</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

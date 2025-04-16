@@ -1,0 +1,48 @@
+{
+    "carousel_panels": [
+        {
+            "title": "March 2025 Highlights",
+            "text": "Discover what we've been up to this month at Ai Science Team.",
+            "image_suggestion": "Photo of the Ai Science Team in a meeting"
+        },
+        {
+            "title": "Monthly Stats",
+            "text": "338 tasks completed with a 10% increase from last month!",
+            "image_suggestion": "Graph showing the increase in tasks"
+        },
+        {
+            "title": "Task Breakdown",
+            "text": "See how tasks are distributed among team members.",
+            "image_suggestion": "Pie chart or bar graph of task distribution"
+        },
+        {
+            "title": "Bank Mega Project",
+            "text": "Deployed new features for Bank Mega's card generator.",
+            "image_suggestion": "Bank Mega logo or card design interface"
+        },
+        {
+            "title": "Content Automation",
+            "text": "Automated image editing for Primer, saving countless hours.",
+            "image_suggestion": "Before and after images of edited content"
+        },
+        {
+            "title": "Innovative Prototypes",
+            "text": "Our team created personalized AI solutions for clients.",
+            "image_suggestion": "Mockup of a personalized AI interface"
+        },
+        {
+            "title": "Learnings & Challenges",
+            "text": "Overcoming obstacles with innovative solutions.",
+            "image_suggestion": "Image of team brainstorming or working"
+        },
+        {
+            "title": "Future Vision",
+            "text": "Imagine the impossible, create the inconceivable with us in April!",
+            "image_suggestion": "Futuristic or abstract tech concept art"
+        }
+    ],
+    "result_type": "carousel",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "num_panels_requested": 8,
+    "timestamp": "2025-04-16T08:53:37.074239"
+}

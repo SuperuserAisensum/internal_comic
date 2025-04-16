@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Results History</h1>
+        <a href="{{ url_for('content.index') }}" class="btn btn-sm btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    {% if history %}
+    <div class="list-group shadow-sm">
+        {% for item in history %}
+            <a href="{{ url_for('content.history_item', result_filename=item.filename) }}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">
+                         <i class="fas {% if item.type == 'Carousel' %}fa-images{% elif item.type == 'Standard' %}fa-file-alt{% else %}fa-question-circle{% endif %} me-2 text-muted"></i>
+                         {{ item.title_preview|truncate(80) }} 
+                         <span class="badge bg-{{ 'success' if item.type == 'Carousel' else 'primary' if item.type == 'Standard' else 'warning' }} rounded-pill">{{ item.type }}</span>
+                    </h6>
+                    <small class="text-muted">{{ item.timestamp }}</small>
+                </div>
+                <p class="mb-1 small text-muted">{{ item.filename }}</p>
+            </a>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="alert alert-secondary text-center">
+            No history found. Generate some content first!
+        </div>
+    {% endif %}
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mt-4">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Add Font Awesome for icons if not already in base -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %} 

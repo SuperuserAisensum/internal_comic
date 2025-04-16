@@ -1,5 +1,6 @@
 from app import create_app
 from datetime import datetime
+import os
 
 app = create_app()
 
@@ -9,4 +10,6 @@ def inject_now():
     return {'now': datetime.utcnow()}
 
 if __name__ == '__main__':
-    app.run(debug=app.config['DEBUG']) 
+    # Get port from environment variable or use 8080 as default
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port, debug=app.config['DEBUG'])

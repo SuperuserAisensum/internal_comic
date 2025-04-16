@@ -1,0 +1,98 @@
+{
+    "result_type": "combined",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "timestamp": "2025-04-16T12:24:44.363851",
+    "carousel_panels": [
+        {
+            "title": "March 2025 Review",
+            "text": "Dive into our monthly business plan review.",
+            "image_suggestion": "A calendar highlighting March 2025."
+        },
+        {
+            "title": "Key Projects",
+            "text": "Explore our diverse projects from ads to development.",
+            "image_suggestion": "A split image showing different project types."
+        },
+        {
+            "title": "Team Performance",
+            "text": "See how our team's productivity has shifted.",
+            "image_suggestion": "A graph showing team performance metrics."
+        },
+        {
+            "title": "Bank Mega Innovation",
+            "text": "Bank Mega's new process card generator showcased.",
+            "image_suggestion": "Mockup of a card generator interface."
+        },
+        {
+            "title": "Content Automation",
+            "text": "Automated content creation for Prochiz & Primer.",
+            "image_suggestion": "Before and after images of edited content."
+        },
+        {
+            "title": "Prototypes Unveiled",
+            "text": "Check out our latest prototypes and mockups.",
+            "image_suggestion": "Various prototype designs on screens."
+        },
+        {
+            "title": "Lessons Learned",
+            "text": "Discover challenges and solutions from this month.",
+            "image_suggestion": "A brainstorming session image."
+        },
+        {
+            "title": "Future Vision",
+            "text": "Imagine the impossible. Create the inconceivable.",
+            "image_suggestion": "A futuristic AI concept image."
+        }
+    ],
+    "comic_script": [
+        {
+            "panel": 1,
+            "description": "A diverse team sits around a futuristic conference table, with holographic charts and graphs in the air.",
+            "dialogue": "Team, our tasks increased by 10%!"
+        },
+        {
+            "panel": 2,
+            "description": "A woman named Aini stands, proudly pointing at a holographic dashboard showing her task increase.",
+            "dialogue": "Aini's tasks surged by 231%!"
+        },
+        {
+            "panel": 3,
+            "description": "A man named Salman adjusts a robot's camera, with a smartphone showing a new app interface.",
+            "dialogue": "New features deployed for Nestle and Bank Mega."
+        },
+        {
+            "panel": 4,
+            "description": "The team cheers, holding up a sign that reads 'Imagine the Impossible. Create the Inconceivable'.",
+            "dialogue": "Let's innovate for April!"
+        }
+    ],
+    "comic_panels": [
+        {
+            "panel": 1,
+            "image_url": "",
+            "description": "A diverse team sits around a futuristic conference table, with holographic charts and graphs in the air. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images/generations)",
+            "dialogue": "Team, our tasks increased by 10%!"
+        },
+        {
+            "panel": 2,
+            "image_url": "",
+            "description": "A woman named Aini stands, proudly pointing at a holographic dashboard showing her task increase. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images/generations)",
+            "dialogue": "Aini's tasks surged by 231%!"
+        },
+        {
+            "panel": 3,
+            "image_url": "",
+            "description": "A man named Salman adjusts a robot's camera, with a smartphone showing a new app interface. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images/generations)",
+            "dialogue": "New features deployed for Nestle and Bank Mega."
+        },
+        {
+            "panel": 4,
+            "image_url": "",
+            "description": "The team cheers, holding up a sign that reads 'Imagine the Impossible. Create the Inconceivable'. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images/generations)",
+            "dialogue": "Let's innovate for April!"
+        }
+    ],
+    "errors": [
+        "Some comic images failed to generate (check panel descriptions)."
+    ]
+}

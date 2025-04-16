@@ -1,0 +1,98 @@
+{
+    "result_type": "combined",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "timestamp": "2025-04-16T12:32:16.728946",
+    "carousel_panels": [
+        {
+            "title": "Welcome to AIsensum",
+            "text": "Discover our Monthly Business Plan Review for March 2025.",
+            "image_suggestion": "A sleek, futuristic office with team members collaborating."
+        },
+        {
+            "title": "Project Overview",
+            "text": "338 tasks tackled this month by our Ai Science Team!",
+            "image_suggestion": "Chart or graph showing task distribution."
+        },
+        {
+            "title": "Team Performance",
+            "text": "Salman up by 4%, Aini by 231%! See how each member contributed.",
+            "image_suggestion": "Team members in action working on different projects."
+        },
+        {
+            "title": "Bank Mega",
+            "text": "Developed card generator process and chiller stock counting.",
+            "image_suggestion": "Bank Mega logo with visual of card generator and stock count."
+        },
+        {
+            "title": "Content Automation",
+            "text": "Automated image editing and recipe hacks for Prochiz & Primer.",
+            "image_suggestion": "Behind-the-scenes of image editing and content creation."
+        },
+        {
+            "title": "Innovation Hub",
+            "text": "Prototypes & mockups for KV, Combiphar, Mayora, and TIA.",
+            "image_suggestion": "Mockups of personalized products or prototypes."
+        },
+        {
+            "title": "Learnings & Growth",
+            "text": "Challenges faced and solutions found with Nestle and Bank Mega.",
+            "image_suggestion": "Team brainstorming session or problem-solving imagery."
+        },
+        {
+            "title": "Future Vision",
+            "text": "Imagine the impossible, create the inconceivable. Join us!",
+            "image_suggestion": "A futuristic vision of technology or AI integration in business."
+        }
+    ],
+    "comic_script": [
+        {
+            "panel": 1,
+            "description": "A team meeting room with charts on the wall, team members reviewing documents.",
+            "dialogue": "Increase by 31 tasks this month!"
+        },
+        {
+            "panel": 2,
+            "description": "A developer coding on multiple screens, AI algorithms floating around.",
+            "dialogue": "New features deployed for Bank Mega."
+        },
+        {
+            "panel": 3,
+            "description": "Digital assets on a computer screen, with editing tools visible.",
+            "dialogue": "Automating image editing for Primer."
+        },
+        {
+            "panel": 4,
+            "description": "A futuristic city skyline, with a holographic sign saying 'Imagine the Impossible'.",
+            "dialogue": "What will we do in April 2025?"
+        }
+    ],
+    "comic_panels": [
+        {
+            "panel": 1,
+            "image_url": "",
+            "description": "A team meeting room with charts on the wall, team members reviewing documents. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "Increase by 31 tasks this month!"
+        },
+        {
+            "panel": 2,
+            "image_url": "",
+            "description": "A developer coding on multiple screens, AI algorithms floating around. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "New features deployed for Bank Mega."
+        },
+        {
+            "panel": 3,
+            "image_url": "",
+            "description": "Digital assets on a computer screen, with editing tools visible. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "Automating image editing for Primer."
+        },
+        {
+            "panel": 4,
+            "image_url": "",
+            "description": "A futuristic city skyline, with a holographic sign saying 'Imagine the Impossible'. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "What will we do in April 2025?"
+        }
+    ],
+    "errors": [
+        "Some comic images failed to generate (check panel descriptions)."
+    ]
+}

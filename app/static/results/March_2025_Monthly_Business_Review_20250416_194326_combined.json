@@ -1,0 +1,96 @@
+{
+    "result_type": "combined",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "timestamp": "2025-04-16T12:41:58.070874",
+    "carousel_panels": [
+        {
+            "title": "March 2025 Insights",
+            "text": "Dive into our monthly business plan review.",
+            "image_suggestion": "Calendar marked March 2025"
+        },
+        {
+            "title": "Project Summary",
+            "text": "338 tasks across various types and clients.",
+            "image_suggestion": "A mix of charts and project icons"
+        },
+        {
+            "title": "Team Performance",
+            "text": "See how our team's productivity changed.",
+            "image_suggestion": "Team members working on laptops"
+        },
+        {
+            "title": "Bank Mega Success",
+            "text": "New features deployed for better efficiency.",
+            "image_suggestion": "Bank Mega logo with tech icons"
+        },
+        {
+            "title": "Content Power",
+            "text": "Automated image editing and asset hacking.",
+            "image_suggestion": "Collage of edited images and recipes"
+        },
+        {
+            "title": "Innovative Prototypes",
+            "text": "Prototypes for personalization and AI assistance.",
+            "image_suggestion": "Mockups of various apps on screens"
+        },
+        {
+            "title": "Lessons Learned",
+            "text": "Challenges and solutions from our projects.",
+            "image_suggestion": "Team in discussion or brainstorming"
+        },
+        {
+            "title": "April's Vision",
+            "text": "Imagine the Impossible. Create the Inconceivable.",
+            "image_suggestion": "Futuristic tech or conceptual art"
+        }
+    ],
+    "comic_script": [
+        {
+            "panel": 1,
+            "description": "A meeting room with team members reviewing documents, graphs on screen showing March 2025 stats.",
+            "dialogue": "Team, let's go over our tasks for March..."
+        },
+        {
+            "panel": 2,
+            "description": "Person coding on laptop, next to a phone with a new app interface for Bank Mega.",
+            "dialogue": "New features deployed for Nestle and Bank Mega."
+        },
+        {
+            "panel": 3,
+            "description": "AI-Q bot assisting a Uniqlo customer with clothing choice in a virtual store.",
+            "dialogue": "How can I help you today?"
+        },
+        {
+            "panel": 4,
+            "description": "Team brainstorming at a whiteboard, sketching new ideas, looking forward to April.",
+            "dialogue": "Next month, let's push the boundaries!"
+        }
+    ],
+    "comic_panels": [
+        {
+            "panel": 1,
+            "image_url": "https://ideogram.ai/api/images/ephemeral/wknpzbFDQGSXD4hWO1-0eQ.png?exp=1744893747&sig=f99755f9f58f317f76488e204dce5f6c786e79541b6047dd32f4caa5ec0f4a5a",
+            "description": "A meeting room with team members reviewing documents, graphs on screen showing March 2025 stats.",
+            "dialogue": "Team, let's go over our tasks for March..."
+        },
+        {
+            "panel": 2,
+            "image_url": "https://ideogram.ai/api/images/ephemeral/J_oGbJEYTMWAByBBck_Zog.png?exp=1744893766&sig=8c61406d009a449147a066ce393fa4f4c0032c70c5efe2d321cec6580b1d5f74",
+            "description": "Person coding on laptop, next to a phone with a new app interface for Bank Mega.",
+            "dialogue": "New features deployed for Nestle and Bank Mega."
+        },
+        {
+            "panel": 3,
+            "image_url": "https://ideogram.ai/api/images/ephemeral/clv7U1CWQEatAA6WjZskjA.png?exp=1744893786&sig=475f0ad5cbdeea7349ea40da6a04b4892a66b8430d8aadefd1d1017f501680b3",
+            "description": "AI-Q bot assisting a Uniqlo customer with clothing choice in a virtual store.",
+            "dialogue": "How can I help you today?"
+        },
+        {
+            "panel": 4,
+            "image_url": "https://ideogram.ai/api/images/ephemeral/d6MiHftaSmiW9RiISakU-Q.png?exp=1744893806&sig=66e4053573d8dad15daf8121a968d55c5e4d549113c77e84227d3c669633960a",
+            "description": "Team brainstorming at a whiteboard, sketching new ideas, looking forward to April.",
+            "dialogue": "Next month, let's push the boundaries!"
+        }
+    ],
+    "errors": []
+}

@@ -1,0 +1,48 @@
+{
+    "carousel_panels": [
+        {
+            "title": "March 2025 Review",
+            "text": "Our monthly business plan review is in! See what we've been up to.",
+            "image_suggestion": "A calendar showing March 2025"
+        },
+        {
+            "title": "Project Summary",
+            "text": "338 tasks completed. From ads to development, here's the breakdown.",
+            "image_suggestion": "A pie chart or bar graph showing task distribution"
+        },
+        {
+            "title": "Team Performance",
+            "text": "Aini's tasks up by 231%! See how our team pushed their limits.",
+            "image_suggestion": "Team members working together"
+        },
+        {
+            "title": "Bank Mega & Nestle",
+            "text": "Enhanced process card generator for Bank Mega, stock counting for Nestle.",
+            "image_suggestion": "Bank Mega and Nestle logos"
+        },
+        {
+            "title": "Creative Content",
+            "text": "Image editing automation and asset hacking for Prochiz and Primer.",
+            "image_suggestion": "Before/after of image editing"
+        },
+        {
+            "title": "Innovative Prototypes",
+            "text": "From video K-drama style to voice assistants, we're pushing boundaries.",
+            "image_suggestion": "Mockup of a video drama or voice assistant"
+        },
+        {
+            "title": "Lessons Learned",
+            "text": "Challenges faced, solutions applied. What we learned from March.",
+            "image_suggestion": "A team in a brainstorming session"
+        },
+        {
+            "title": "April's Vision",
+            "text": "Imagine the impossible, create the inconceivable. What's next?",
+            "image_suggestion": "Vision board or futuristic tech imagery"
+        }
+    ],
+    "result_type": "carousel",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "num_panels_requested": 8,
+    "timestamp": "2025-04-16T12:15:06.153924"
+}

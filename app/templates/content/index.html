@@ -4,58 +4,45 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mb-4">Content Generator</h1>
+    <h1 class="mb-4">Content Generation Dashboard</h1>
     
-    <div class="card mb-4">
-        <div class="card-body">
-            <h2 class="card-title h4">Generate Social Media Content</h2>
-            <p class="card-text">Upload your newsletter or PDF files to generate social media content, topic ideas, and more.</p>
-            
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card mb-3">
-                        <div class="card-header">Content Types</div>
-                        <div class="card-body">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="linkedin-toggle" {% if toggles.linkedin %}checked{% endif %}>
-                                <label class="form-check-label" for="linkedin-toggle">LinkedIn Posts</label>
-                            </div>
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="instagram-toggle" {% if toggles.instagram %}checked{% endif %}>
-                                <label class="form-check-label" for="instagram-toggle">Instagram Captions</label>
-                            </div>
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="comic-toggle" {% if toggles.comic_scripts %}checked{% endif %}>
-                                <label class="form-check-label" for="comic-toggle">Comic Scripts</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">Actions</div>
-                        <div class="card-body">
-                            <a href="{{ url_for('content.upload') }}" class="btn btn-primary mb-2 w-100">Upload Newsletter/PDF</a>
-                            <a href="{{ url_for('content.results') }}" class="btn btn-outline-secondary w-100">View Recent Results</a>
-                        </div>
-                    </div>
-                </div>
+    <p class="lead mb-4">Choose an option below to generate content or view past results.</p>
+
+    <div class="list-group">
+        <a href="{{ url_for('content.upload') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">1. Upload Newsletter/PDF/Text</h5>
+                <p class="mb-1 small">Generate standard content (LinkedIn posts, Instagram captions, topics) from your documents.</p>
             </div>
-        </div>
+            <i class="fas fa-file-alt fa-2x text-primary"></i>
+        </a>
+        <a href="{{ url_for('content.upload_carousel') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">2. Generate Carousel Content</h5>
+                <p class="mb-1 small">Upload a summary or text to generate content for an 8-panel ad carousel.</p>
+            </div>
+            <i class="fas fa-images fa-2x text-success"></i>
+        </a>
+        <a href="{{ url_for('content.history') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">3. View History</h5>
+                <p class="mb-1 small">Access previously generated content results.</p>
+            </div>
+            <i class="fas fa-history fa-2x text-secondary"></i>
+        </a>
+        <a href="{{ url_for('content.upload_combined') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">4. Generate Content + Comic</h5>
+                <p class="mb-1 small">Upload a PDF/Text to generate both carousel content and a comic strip.</p>
+            </div>
+            <i class="fas fa-bolt fa-2x text-warning"></i>
+        </a>
     </div>
-    
-    <div class="card">
-        <div class="card-header">
-            <h2 class="h5 mb-0">How to Use Content Generator</h2>
-        </div>
-        <div class="card-body">
-            <ol class="mb-0">
-                <li class="mb-2">Upload your newsletter (.msg, .eml) or PDF files</li>
-                <li class="mb-2">Select which content types you want to generate</li>
-                <li class="mb-2">Configure any additional settings</li>
-                <li class="mb-2">Generate and download your content</li>
-            </ol>
-        </div>
-    </div>
+
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 {% endblock %} 

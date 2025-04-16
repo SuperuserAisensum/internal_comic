@@ -1,0 +1,28 @@
+{
+    "carousel_panels": [
+        {
+            "title": "March Milestones",
+            "text": "Discover what our team at Ai Sensum achieved in March 2025!",
+            "image_suggestion": "Team meeting or project planning session"
+        },
+        {
+            "title": "Bank Mega Boost",
+            "text": "Enhanced user experience with new camera apps & intelligent solutions.",
+            "image_suggestion": "Bank Mega logo with digital interface elements"
+        },
+        {
+            "title": "Content Magic",
+            "text": "Automated image editing and asset hacking for Prochiz & Primer.",
+            "image_suggestion": "Display of edited images or a collage of recipes"
+        },
+        {
+            "title": "Imagine the Future",
+            "text": "What's next? Explore the impossible and create the inconceivable.",
+            "image_suggestion": "A futuristic, abstract tech landscape"
+        }
+    ],
+    "result_type": "carousel",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "num_panels_requested": 4,
+    "timestamp": "2025-04-16T09:00:28.965484"
+}

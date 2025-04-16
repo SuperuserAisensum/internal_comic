@@ -12,8 +12,8 @@ class Config:
     DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 't')
     
     # API Keys
-    AISENSUM_API_KEY = os.environ.get('AISENSUM_API_KEY', 'xai-Jy9SbOsELWHVnuzwnUXZRF0Z7nPqEQcragZbFCjESk10kxfcunButHGACTJ8NQVHNuBRgiHI5gN13Tym')
-    IDEOGRAM_API_KEY = os.environ.get('IDEOGRAM_API_KEY', 'zshbRFLd-WJ_IYW0KdTRbBN_jbSUVRZF_yY64GMs6uTE-vwE24s6t59WWwIHaIMBU3unWOaSEhceSgc6q6kqvg')
+    AISENSUM_API_KEY = os.environ.get('AISENSUM_API_KEY')
+    IDEOGRAM_API_KEY = os.environ.get('IDEOGRAM_API_KEY')
     
     # Model Configuration
     MODEL_NAME = os.environ.get('MODEL_NAME', 'grok-beta')

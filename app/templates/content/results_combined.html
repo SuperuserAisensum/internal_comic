@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Generated Content + Comic</h1>
+    
+    {# Display overall errors if any #}
+    {% if results.errors %}
+        <div class="alert alert-warning">
+            <h4 class="alert-heading">Processing Issues Encountered</h4>
+            <ul>
+                {% for error in results.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <p>Some results might be incomplete.</p>
+        </div>
+    {% endif %}
+
+    <hr>
+    
+    {# --- Carousel Section --- #}
+    <h2 class="mt-4 mb-3">Carousel Content</h2>
+    {% if results.carousel_panels %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for panel in results.carousel_panels %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            Panel {{ loop.index }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ panel.title }}</h5>
+                            <p class="card-text">{{ panel.text }}</p>
+                        </div>
+                        <div class="card-footer bg-light border-top">
+                            <small class="text-muted fst-italic">
+                                <i class="fas fa-lightbulb me-1"></i> {{ panel.image_suggestion or 'N/A' }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+         <button class="btn btn-sm btn-outline-primary mt-3" onclick="downloadCarouselTextOnly(event)"><i class="fas fa-download me-1"></i> Download Carousel Text</button>
+    {% else %}
+        <div class="alert alert-secondary">Carousel content could not be generated.</div>
+    {% endif %}
+
+    <hr class="my-5">
+
+    {# --- Comic Strip Section --- #}
+    <h2 class="mb-3">Comic Strip</h2>
+    {% if results.comic_panels %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for panel in results.comic_panels %}
+                <div class="col">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-secondary text-white">
+                            Comic Panel {{ panel.panel }}
+                        </div>
+                        {% if panel.image_url %}
+                            <img src="{{ panel.image_url }}" class="card-img-top" alt="Comic Panel {{ panel.panel }} - {{ panel.description }}">
+                        {% else %}
+                            <div class="card-body text-center text-muted" style="min-height: 150px; display: flex; align-items: center; justify-content: center;">
+                                <em>Image generation failed or skipped.<br>{{ panel.description }}</em>
+                            </div>
+                        {% endif %}
+                        {% if panel.dialogue %}
+                            <div class="card-body py-2">
+                                <p class="card-text fst-italic">"{{ panel.dialogue }}"</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+         <button class="btn btn-sm btn-outline-success mt-1" onclick="downloadComicImages(event)"><i class="fas fa-images me-1"></i> Download Comic Images (ZIP)</button>
+    {% else %}
+         <div class="alert alert-secondary">Comic strip could not be generated.</div>
+    {% endif %}
+    
+    <hr class="my-4">
+    
+    <div class="mt-4 d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{{ url_for('content.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> Back to Dashboard</a>
+            <a href="{{ url_for('content.history') }}" class="btn btn-info"><i class="fas fa-history me-1"></i> View History</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include JSZip library from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+    // Store the results data passed from Flask safely
+    let resultsData = {};
+    try {
+        resultsData = JSON.parse('{{ results|tojson|safe }}');
+    } catch (e) {
+        console.error("Error parsing results data:", e);
+        // Handle error appropriately, maybe show a message to the user
+        resultsData = { errors: ["Failed to load results data."], carousel_panels: [], comic_panels: [] }; 
+    }
+
+    // --- Download Carousel Text --- 
+    function downloadCarouselTextOnly(event) {
+        const button = event.target;
+        const originalHtml = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
+        let content = 'Generated Carousel Ad Text\n\n';
+        if (resultsData && resultsData.carousel_panels) {
+            resultsData.carousel_panels.forEach((panel, i) => {
+                content += `--- Panel ${i + 1} ---\n`;
+                content += `Title: ${panel.title}\n`;
+                content += `Text: ${panel.text}\n`;
+                content += `Image Suggestion: ${panel.image_suggestion || 'N/A'}\n\n`;
+            });
+            downloadTextFile('carousel_content.txt', content);
+        }
+        setTimeout(() => { 
+             button.innerHTML = '<i class="fas fa-download me-1"></i> Download Carousel Text';
+             button.disabled = false; 
+        }, 1000);
+    }
+
+    // --- Download Comic Images (as ZIP) --- 
+    async function downloadComicImages(event) {
+        const button = event.target;
+        const originalHtml = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Preparing ZIP...';
+
+        if (!resultsData || !resultsData.comic_panels || resultsData.comic_panels.length === 0) {
+            alert("No comic panels with images found to download.");
+            button.disabled = false;
+            button.innerHTML = originalHtml;
+            return;
+        }
+
+        const zip = new JSZip();
+        const promises = [];
+        let imageCount = 0;
+
+        resultsData.comic_panels.forEach(panel => {
+            // Check if panel and image_url exist
+            if (panel && panel.image_url) { 
+                imageCount++;
+                const panelNum = panel.panel || 'unknown'; // Use panel number or fallback
+                const promise = fetch(panel.image_url) // Fetch the image URL
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status} for panel ${panelNum}`);
+                        }
+                        return response.blob(); // Get image data as blob
+                    })
+                    .then(blob => {
+                        // Ensure blob type is image, fallback filename if needed
+                        const filename = `comic_panel_${panelNum}.${blob.type.split('/')[1] || 'png'}`;
+                        zip.file(filename, blob);
+                        console.log(`Added panel ${panelNum} image to ZIP.`);
+                    })
+                    .catch(error => {
+                        console.error(`Error processing panel ${panelNum}:`, error);
+                        zip.file(`comic_panel_${panelNum}_ERROR.txt`, `Failed to download image. Error: ${error.message || String(error)}`);
+                    });
+                promises.push(promise);
+            } else if (panel) {
+                // Handle case where panel exists but image_url doesn't
+                const panelNum = panel.panel || 'unknown';
+                console.warn(`Panel ${panelNum} has no image_url.`);
+                zip.file(`comic_panel_${panelNum}_NO_IMAGE.txt`, `Image URL was missing or generation failed. Description: ${panel.description || 'N/A'}`);
+            } else {
+                console.error("Found invalid panel data in comic_panels.");
+            }
+        });
+
+        if (imageCount === 0 && resultsData.comic_panels.length > 0) {
+             alert("No valid comic images were found to download.");
+             button.disabled = false;
+             button.innerHTML = originalHtml;
+             return;
+        }
+
+        try {
+            await Promise.all(promises);
+            console.log("Generating final ZIP file...");
+            const zipBlob = await zip.generateAsync({ type: "blob" });
+            downloadBlob(zipBlob, 'comic_strip.zip');
+            console.log("ZIP download triggered.");
+        } catch (error) {
+            console.error("Error creating ZIP file:", error);
+            alert("Failed to create the ZIP file.");
+        } finally {
+            button.disabled = false;
+            button.innerHTML = originalHtml;
+        }
+    }
+
+    // --- Helper Functions --- 
+    function downloadTextFile(filename, text) {
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+    
+    function downloadBlob(blob, filename) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href); // Clean up
+    }
+
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %} 

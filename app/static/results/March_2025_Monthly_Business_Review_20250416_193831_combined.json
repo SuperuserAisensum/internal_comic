@@ -1,0 +1,98 @@
+{
+    "result_type": "combined",
+    "original_filename": "March_2025_Monthly_Business_Review.pdf",
+    "timestamp": "2025-04-16T12:38:15.955644",
+    "carousel_panels": [
+        {
+            "title": "Unlock Your Business Potential",
+            "text": "Discover how Ai Sensum can revolutionize your operations in March 2025.",
+            "image_suggestion": "A futuristic office environment with holograms"
+        },
+        {
+            "title": "Monthly Review Highlights",
+            "text": "From ads planning to development, see our progress in March.",
+            "image_suggestion": "A calendar page turning to March 2025"
+        },
+        {
+            "title": "Diverse Task Types",
+            "text": "338 tasks across various categories, up by 10% from last month!",
+            "image_suggestion": "A pie chart showing task distribution"
+        },
+        {
+            "title": "Bank Mega Innovation",
+            "text": "Introduced process card generator and enhanced stock counting.",
+            "image_suggestion": "Bank Mega logo with tech icons"
+        },
+        {
+            "title": "Content Creation Boost",
+            "text": "Automated image editing and asset hacking for Prochiz and Primer.",
+            "image_suggestion": "Graphic designer working on a computer"
+        },
+        {
+            "title": "AI Prototypes",
+            "text": "Developed AI-driven video and voice assistants for our clients.",
+            "image_suggestion": "A mockup screen showing various AI applications"
+        },
+        {
+            "title": "Challenges & Solutions",
+            "text": "Overcame obstacles with innovative approaches for Nestle and Primer.",
+            "image_suggestion": "A team brainstorming session"
+        },
+        {
+            "title": "Imagine the Impossible",
+            "text": "See what Ai Sensum has planned for April 2025.",
+            "image_suggestion": "A futuristic cityscape with AI and tech elements"
+        }
+    ],
+    "comic_script": [
+        {
+            "panel": 1,
+            "description": "A futuristic office with team members reviewing documents, charts on screen.",
+            "dialogue": "\"March 2025 Business Plan Review\""
+        },
+        {
+            "panel": 2,
+            "description": "A team member, Aini, works on a computer, graphs showing increase.",
+            "dialogue": "Aini: \"My tasks increased by 231%!\""
+        },
+        {
+            "panel": 3,
+            "description": "Bank Mega logo with a card generator interface on a computer.",
+            "dialogue": "\"Bank Mega: Card Generator\""
+        },
+        {
+            "panel": 4,
+            "description": "Nestle logo with a drone scanning a chiller full of stock.",
+            "dialogue": "\"Nestle: Chiller Stock Counting\""
+        }
+    ],
+    "comic_panels": [
+        {
+            "panel": 1,
+            "image_url": "",
+            "description": "A futuristic office with team members reviewing documents, charts on screen. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "\"March 2025 Business Plan Review\""
+        },
+        {
+            "panel": 2,
+            "image_url": "",
+            "description": "A team member, Aini, works on a computer, graphs showing increase. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "Aini: \"My tasks increased by 231%!\""
+        },
+        {
+            "panel": 3,
+            "image_url": "",
+            "description": "Bank Mega logo with a card generator interface on a computer. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "\"Bank Mega: Card Generator\""
+        },
+        {
+            "panel": 4,
+            "image_url": "",
+            "description": "Nestle logo with a drone scanning a chiller full of stock. (Error: 404 Client Error: Not Found for url: https://api.ideogram.ai/v1/images)",
+            "dialogue": "\"Nestle: Chiller Stock Counting\""
+        }
+    ],
+    "errors": [
+        "Some comic images failed to generate (check panel descriptions)."
+    ]
+}

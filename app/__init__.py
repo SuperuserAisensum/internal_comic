@@ -11,15 +11,15 @@ def create_app(config_class=Config):
     # Initialize extensions
     bootstrap.init_app(app)
     
-    # Register blueprints
-    from app.main import bp as main_bp
-    app.register_blueprint(main_bp)
+    # Register blueprints by importing the routes module
+    from app.main import routes as main_routes
+    app.register_blueprint(main_routes.bp)
     
-    from app.content import bp as content_bp
-    app.register_blueprint(content_bp, url_prefix='/content')
+    from app.content import routes as content_routes
+    app.register_blueprint(content_routes.bp, url_prefix='/content')
     
-    from app.comics import bp as comics_bp
-    app.register_blueprint(comics_bp, url_prefix='/comics')
+    from app.comics import routes as comics_routes
+    app.register_blueprint(comics_routes.bp, url_prefix='/comics')
     
     @app.route('/test')
     def test_page():

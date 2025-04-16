@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Upload Text or PDF for Carousel Generation</h1>
+    <p class="lead mb-4">Upload a plain text file (.txt) or a PDF document (.pdf) containing the summary or content you want to turn into an ad carousel.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="file" class="form-label">Select .txt or .pdf File:</label>
+            <input type="file" class="form-control" id="file" name="file" accept=".txt,.pdf" required>
+        </div>
+        <div class="mb-3">
+            <label for="num_panels" class="form-label">Number of Panels (e.g., 4-12):</label>
+            <input type="number" class="form-control" id="num_panels" name="num_panels" value="8" min="4" max="12" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload and Generate Carousel</button>
+    </form>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    File Requirements
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>File Types:</strong> Plain Text (.txt), PDF (.pdf)</li>
+                        <li><strong>Encoding (TXT):</strong> UTF-8 recommended</li>
+                        <li><strong>Max Size:</strong> 5MB for .txt, 10MB for .pdf</li>
+                        <li><strong>Content:</strong> Should be a summary or text suitable for generating carousel panels. PDF text will be extracted.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
